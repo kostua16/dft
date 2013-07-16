@@ -1,0 +1,36 @@
+<project name="MyProject" default="all">
+	<property name="srcDir" location="dft"/>
+	<property name="libsDir" location="${srcDir}/Libs"/>
+	<property name="buildDir" location="build"/>
+	<property name="debugDir" location="Debug"/>
+	<property name="releaseDir" location="Release"/>
+	<property name="buildDebug" location="${buildDir}/${debugDir}"/>
+	<property name="buildRelease" location="${buildDir}/${releaseDir}"/>
+	<property name="compilerPath" location=""/>
+	<property name="buildFile" location="dft.exe"/>
+	
+	<ccopts id="shared.opts">
+		<include location="${srcDir}" />
+		<include location="${libsDir}" />
+		<sources dir="${srcDir}" include="*.cpp" />
+		<multithreaded />
+			<rtti />
+		<exceptions />
+	</ccopts>
+	
+	<target name="make_dirs" description="Create dirs" >
+		<echo>Creating dirs...</echo>
+		<mkdir dir="${buildDir}"/>
+		<mkdir dir="${buildDebug}"/>
+		<mkdir dir="${buildRelease}"/>
+		<echo>Creating dirs...Complete</echo>
+	</target>
+	<target name="build_debug" description="Build debug exe" >
+		<msvc compiler="${compilerPath}" outfile="${buildDebug}/${buildFile}">
+			<ccopts refid="shared.opts" />
+		</msvc>
+	</target>
+    <target name="all" description="Do the entire build" >
+        <echo>I'm building my software</echo>
+    </target>
+</project>
