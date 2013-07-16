@@ -1,36 +1,137 @@
-<project name="MyProject" default="all">
-	<property name="srcDir" location="dft"/>
-	<property name="libsDir" location="${srcDir}/Libs"/>
-	<property name="buildDir" location="build"/>
-	<property name="debugDir" location="Debug"/>
-	<property name="releaseDir" location="Release"/>
-	<property name="buildDebug" location="${buildDir}/${debugDir}"/>
-	<property name="buildRelease" location="${buildDir}/${releaseDir}"/>
-	<property name="compilerPath" location=""/>
-	<property name="buildFile" location="dft.exe"/>
+<project name="DFT" default="Solution.Build" xmlns:dn="antlib:org.apache.ant.dotnet">
 	
-	<ccopts id="shared.opts">
-		<include location="${srcDir}" />
-		<include location="${libsDir}" />
-		<sources dir="${srcDir}" include="*.cpp" />
-		<multithreaded />
-			<rtti />
-		<exceptions />
-	</ccopts>
+	<property name="DFT.Dir" location="dft" />
+	<property name="DFT.Libs.Dir" location="dft/Libs" />
+	<property name="Solution.Debug.Dir" location="Debug" />
+	<property name="Solution.Release.Dir" location="Release" />
+	<property name="DFT.Debug.Dir" location="dft\Debug" />
+	<property name="DFT.Release.Dir" location="dft\Release" />
+	<property name="DFT.Debug.Exe" location="dft\Debug\dft.exe" />
+	<property name="DFT.Release.Exe" location="dft\Release\dft.exe" />
+	<property name="Solution.Dir" location="Build" />
+	<property name="Solution.Dir.Release" location="Build/Release" />
+	<property name="Solution.Dir.Debug" location="Build/Debug" />
+	<property name="Solution.Dir.Zip" location="Build/Zip" />
+	<property name="Solution.ZipFile.Release" location="Build/Zip/release.zip" />
+	<property name="Solution.ZipFile.Debug" location="Build/Zip/debug.zip" />
 	
-	<target name="make_dirs" description="Create dirs" >
-		<echo>Creating dirs...</echo>
-		<mkdir dir="${buildDir}"/>
-		<mkdir dir="${buildDebug}"/>
-		<mkdir dir="${buildRelease}"/>
-		<echo>Creating dirs...Complete</echo>
+	<target name="DFT.Compile.Debug" description="Compile project DFT" depends="DFT.Clean.Debug" >
+		<dn:msbuild buildfile="${DFT.Dir}\dft.vcxproj" >
+			<property name="Configuration" value="Debug"/>
+		</dn:msbuild>
 	</target>
-	<target name="build_debug" description="Build debug exe" >
-		<msvc compiler="${compilerPath}" outfile="${buildDebug}/${buildFile}">
-			<ccopts refid="shared.opts" />
-		</msvc>
+	
+	<target name="DFT.Compile.Release" description="Compile project DFT" depends="DFT.Clean.Release" >
+		<dn:msbuild buildfile="${DFT.Dir}\dft.vcxproj" >
+			<property name="Configuration" value="Release"/>
+		</dn:msbuild>
 	</target>
-    <target name="all" description="Do the entire build" >
-        <echo>I'm building my software</echo>
-    </target>
+	
+	<target name="DFT.Clean.Debug">
+		<delete dir="${DFT.Debug.Dir}" />
+	</target>
+	
+	<target name="DFT.Clean.Release">
+		<delete dir="${DFT.Release.Dir}" />
+	</target>
+	
+	<target name="DFT.Clean">
+		<antcall target="DFT.Clean.Debug" />
+		<antcall target="DFT.Clean.Release" />
+	</target>
+	
+	<target name="Solution.MakeDirs.All">
+		<mkdir dir="${Solution.Dir}" />
+	</target>
+	
+	<target name="Solution.Clean.All">
+		<delete dir="${Solution.Dir}" />
+	</target>
+	
+	<target name="Solution.MakeDirs.Debug" depends="Solution.MakeDirs.All" >
+		<mkdir dir="${Solution.Dir.Debug}" />
+	</target>
+	
+	<target name="Solution.MakeDirs.Release" depends="Solution.MakeDirs.All" >
+		<mkdir dir="${Solution.Dir.Release}" />
+	</target>
+	
+	<target name="Solution.MakeDirs.Zip" depends="Solution.MakeDirs.All" >
+		<mkdir dir="${Solution.Dir.Zip}" />
+	</target>
+	
+	<target name="Solution.Clean.Debug">
+		<antcall target="DFT.Clean.Debug" />
+		<delete dir="${Solution.Dir.Debug}" />
+	</target>
+	
+	<target name="Solution.Clean.Release">
+		<antcall target="DFT.Clean.Release" />
+		<delete dir="${Solution.Dir.Release}" />
+	</target>
+	
+	<target name="Solution.Clean.Zip">
+		<delete dir="${Solution.Dir.Zip}" />
+	</target>
+	
+	<target name="Solution.Make.Debug">
+		<antcall target="DFT.Compile.Debug" />
+		<copy file="${DFT.Debug.Exe}" todir="${Solution.Dir.Debug}" />
+		<copy todir="${Solution.Dir.Debug}">
+			<fileset dir="${DFT.Libs.Dir}" includes="*.dll" />
+		</copy>
+	</target>
+	
+	<target name="Solution.Make.Release">
+		<antcall target="DFT.Compile.Release" />
+		<copy file="${DFT.Release.Exe}" todir="${Solution.Dir.Release}" />
+		<copy todir="${Solution.Dir.Release}">
+			<fileset dir="${DFT.Libs.Dir}" includes="*.dll" />
+		</copy>
+	</target>
+	
+	<target name="Solution.MakeDirs">
+		<antcall target="Solution.MakeDirs.All" />
+		<antcall target="Solution.MakeDirs.Debug" />
+		<antcall target="Solution.MakeDirs.Release" />
+	</target>
+	
+	<target name="Solution.Make">
+		<antcall target="Solution.Make.Debug" />
+		<antcall target="Solution.Make.Release" />
+	</target>
+	
+	<target name="Solution.Clean">
+		<antcall target="Solution.Clean.Debug" />
+		<antcall target="Solution.Clean.Release" />
+		<antcall target="Solution.Clean.Zip" />
+		<antcall target="Solution.Clean.All" />
+	</target>
+	
+	<target name="Solution.PostClean">
+		<antcall target="Solution.Clean.Debug" />
+		<antcall target="Solution.Clean.Release" />
+	</target>
+	
+	<target name="Solution.Zip.Debug">
+		<zip destfile="${Solution.ZipFile.Debug}" basedir="${Solution.Dir.Debug}" includes="*.*" />
+	</target>
+	
+	<target name="Solution.Zip.Release">
+		<zip destfile="${Solution.ZipFile.Release}" basedir="${Solution.Dir.Release}" includes="*.*" />
+	</target>
+	
+	<target name="Solution.Zip">
+		<antcall target="Solution.Zip.Debug" />
+		<antcall target="Solution.Zip.Release" />
+	</target>
+	
+	<target name="Solution.Build">
+		<antcall target="Solution.Clean" />
+		<antcall target="Solution.MakeDirs" />
+		<antcall target="Solution.Make" />
+		<antcall target="Solution.Zip" />
+		<antcall target="Solution.PostClean" />
+	</target>
+	
 </project>
