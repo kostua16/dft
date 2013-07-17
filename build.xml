@@ -12,8 +12,8 @@
 	<property name="Solution.Dir.Release" location="Build/Release" />
 	<property name="Solution.Dir.Debug" location="Build/Debug" />
 	<property name="Solution.Dir.Zip" location="Build/Zip" />
-	<property name="Solution.ZipFile.Release" location="Build/Zip/release.zip" />
-	<property name="Solution.ZipFile.Debug" location="Build/Zip/debug.zip" />
+	<property name="Solution.ZipFile.Release" location="Build/Zip/release" />
+	<property name="Solution.ZipFile.Debug" location="Build/Zip/debug" />
 	
 	<target name="DFT.Compile.Debug" description="Compile project DFT" depends="DFT.Clean.Debug" >
 		<dn:msbuild buildfile="${DFT.Dir}\dft.vcxproj" >
@@ -114,11 +114,11 @@
 	</target>
 	
 	<target name="Solution.Zip.Debug">
-		<zip destfile="${Solution.ZipFile.Debug}" basedir="${Solution.Dir.Debug}" includes="*.*" />
+		<zip destfile="${Solution.ZipFile.Debug}_${BUILD_NUMBER}.zip" basedir="${Solution.Dir.Debug}" includes="*.*" />
 	</target>
 	
 	<target name="Solution.Zip.Release">
-		<zip destfile="${Solution.ZipFile.Release}" basedir="${Solution.Dir.Release}" includes="*.*" />
+		<zip destfile="${Solution.ZipFile.Release}_${BUILD_NUMBER}.zip" basedir="${Solution.Dir.Release}" includes="*.*" />
 	</target>
 	
 	<target name="Solution.Zip">
