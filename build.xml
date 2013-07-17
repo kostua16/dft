@@ -115,11 +115,11 @@
 	</target>
 	
 	<target name="Solution.Zip.Debug">
-		<zip destfile="${Solution.ZipFile.Debug.Name}" basedir="${Solution.Dir.Debug}" includes="*.*" />
+		<zip destfile="${Solution.Dir.Zip}/${Solution.ZipFile.Debug.Name}" basedir="${Solution.Dir.Debug}" includes="*.*" />
 	</target>
 	
 	<target name="Solution.Zip.Release">
-		<zip destfile="${Solution.ZipFile.Release.Name}" basedir="${Solution.Dir.Release}" includes="*.*" />
+		<zip destfile="${Solution.Dir.Zip}/${Solution.ZipFile.Release.Name}" basedir="${Solution.Dir.Release}" includes="*.*" />
 	</target>
 	
 	<target name="Solution.Zip">
