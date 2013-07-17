@@ -114,11 +114,11 @@
 	</target>
 	
 	<target name="Solution.Zip.Debug">
-		<zip destfile="${Solution.ZipFile.Debug}_${BUILD_NUMBER}.zip" basedir="${Solution.Dir.Debug}" includes="*.*" />
+		<zip destfile="${Solution.ZipFile.Debug}_${env.BUILD_NUMBER}.zip" basedir="${Solution.Dir.Debug}" includes="*.*" />
 	</target>
 	
 	<target name="Solution.Zip.Release">
-		<zip destfile="${Solution.ZipFile.Release}_${BUILD_NUMBER}.zip" basedir="${Solution.Dir.Release}" includes="*.*" />
+		<zip destfile="${Solution.ZipFile.Release}_${env.BUILD_NUMBER}.zip" basedir="${Solution.Dir.Release}" includes="*.*" />
 	</target>
 	
 	<target name="Solution.Zip">
