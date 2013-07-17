@@ -1,5 +1,6 @@
 <project name="DFT" default="Solution.Build" xmlns:dn="antlib:org.apache.ant.dotnet">
 	
+	<property environment="env"/>
 	<property name="DFT.Dir" location="dft" />
 	<property name="DFT.Libs.Dir" location="dft/Libs" />
 	<property name="Solution.Debug.Dir" location="Debug" />
@@ -12,8 +13,8 @@
 	<property name="Solution.Dir.Release" location="Build/Release" />
 	<property name="Solution.Dir.Debug" location="Build/Debug" />
 	<property name="Solution.Dir.Zip" location="Build/Zip" />
-	<property name="Solution.ZipFile.Release" location="Build/Zip/release" />
-	<property name="Solution.ZipFile.Debug" location="Build/Zip/debug" />
+	<property name="Solution.ZipFile.Release.Name" value="${env.JOB_NAME}_Release_${env.BUILD_NUMBER}.zip"/>
+	<property name="Solution.ZipFile.Debug.Name" value="${env.JOB_NAME}_Debug_${env.BUILD_NUMBER}.zip"/>
 	
 	<target name="DFT.Compile.Debug" description="Compile project DFT" depends="DFT.Clean.Debug" >
 		<dn:msbuild buildfile="${DFT.Dir}\dft.vcxproj" >
@@ -114,11 +115,11 @@
 	</target>
 	
 	<target name="Solution.Zip.Debug">
-		<zip destfile="${Solution.ZipFile.Debug}_${env.BUILD_NUMBER}.zip" basedir="${Solution.Dir.Debug}" includes="*.*" />
+		<zip destfile="${Solution.ZipFile.Debug.Name}" basedir="${Solution.Dir.Debug}" includes="*.*" />
 	</target>
 	
 	<target name="Solution.Zip.Release">
-		<zip destfile="${Solution.ZipFile.Release}_${env.BUILD_NUMBER}.zip" basedir="${Solution.Dir.Release}" includes="*.*" />
+		<zip destfile="${Solution.ZipFile.Release.Name}" basedir="${Solution.Dir.Release}" includes="*.*" />
 	</target>
 	
 	<target name="Solution.Zip">
